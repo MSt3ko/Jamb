@@ -77,7 +77,7 @@ class Dice:
         self.dice = kept + new_dice
         self.dice_sort()
 
-
+# Class implementing the leaflet for the game.
 class Leaflet:
 
     def __init__(self, amount=5, sides=6, call=True):
