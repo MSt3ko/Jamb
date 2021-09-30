@@ -140,4 +140,3 @@ if __name__ == '__main__':
     leaflet = Leaflet()
     leaflet.game_standings()
     print(leaflet)
-    print(1)
