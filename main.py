@@ -40,6 +40,13 @@ class Die:
     def __eq__(self, other):
         return self.value == other.value
 
+    def sum(*args):
+        total = 0
+        for i in args:
+            total += i.value
+        return total
+
+
 
 class Dice:
     """This is a class representing a set of dice for a game."""
@@ -48,7 +55,7 @@ class Dice:
         """Sorts the dice for display purposes."""
         self.dice = sorted(self.dice, key=lambda d: d.value)
 
-    def __init__(self, amount=5, sides=6):
+    def __init__(self, amount=5, sides=6, *args):
         """Initializes a set of dice for a game of jamb. Default 5 6-sided dice."""
         self.amount = amount
         self.dice = []
@@ -58,7 +65,10 @@ class Dice:
         self.dice_sort()
 
     def get_values(self):
-        print(self.dice)
+        values = []
+        for i in self.dice:
+            values.append(i.value)
+        return values
 
     def __repr__(self):
         return str(self.dice)
@@ -76,6 +86,16 @@ class Dice:
             new_dice.append(Die(sides=self.sides))
         self.dice = kept + new_dice
         self.dice_sort()
+
+    def __iter__(self):
+        return iter(self.dice)
+
+    def sum(self):
+        return Die.sum(*self.dice)
+
+    def test(self):
+        return
+
 
 # Class implementing the leaflet for the game.
 class Leaflet:
@@ -126,17 +146,77 @@ class Leaflet:
     def calculate_points(self):
         sums = ()
 
-
-
     def __repr__(self):
         return "Game with " + str(self.amount) + " dice with "+str(self.sides) + " sides. There are "\
                + str(self.table.sum().sum()) + " points here."
 
 
+class Evaluate:
+
+    @staticmethod
+    def number(dice, num):
+        return (dice.get_values().count(num))*num
+
+    @staticmethod
+    def max_min(dice):
+        return sum(dice.dice)
+
+    @staticmethod
+    def tris(dice):
+        for i in dice.get_values():
+            if dice.get_values().count(i) >= 3:
+                return 3*i+10
+        return 0
+
+    @staticmethod
+    def skala(dice):
+        if dice.get_values() == [1, 2, 3, 4, 5]:
+            return 35
+        elif dice.get_values() == [2, 3, 4, 5, 6]:
+            return 45
+        else:
+            return 0
+
+    @staticmethod
+    def full_house(dice):
+        values = dice.get_values()
+        counts = [0 for i in range(6)]
+        for i in values:
+            counts[i] += 1
+        if 5 in counts or (3 in counts and 2 in counts):
+            return (sum((j+1)*counts[j] for j in range(6)))
+        return 0
+
+    @staticmethod
+    def poker(dice):
+        for i in dice.get_values():
+            if dice.get_values().count(i) >= 4:
+                return 4*i+40
+        return 0
+
+    @staticmethod
+    def jamb(dice):
+        for i in dice.get_values():
+            if dice.get_values().count(i) >= 5:
+                return 5*i+10
+        return 0
+
+def evaluate_test():
+    for i in range(100):
+        num = random.randint(1,6)
+        D6_5 = Dice()
+        print(D6_5)
+        print(Evaluate.skala(D6_5))
+
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    D6_5 = Dice()
-    D6_5.get_values()
+    """D6_5 = Dice()
+    print(D6_5)
+    print(Evaluate.number(D6_5, 1))
+    print(Dice.sum(D6_5))
     leaflet = Leaflet()
     leaflet.game_standings()
-    print(leaflet)
+    print(leaflet)"""
+    evaluate_test()
